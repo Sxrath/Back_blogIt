@@ -7,12 +7,10 @@ urlpatterns=[
     #authentification-----------------------------------------------------
     path('register/', RegisterView.as_view(), name='register'),
     path('login/', CustomLoginView.as_view(), name='login'),
-  
-    #userData---------------------------------------------------------------
 
     #User-Profile------------------------------------------------------------
-path('create-profile/', CreateProfile.as_view(), name='create-profile'),    #path('updateProfile/<int:id>/', ProfileUpdateView.as_view(), name='profile_update'),
- path('profile/update/<int:pk>/', UpdateProfile.as_view(), name='update-profile'),
+    path('create-profile/', CreateProfile.as_view(), name='create-profile'),    #path('updateProfile/<int:id>/', ProfileUpdateView.as_view(), name='profile_update'),
+    path('profile/update/<int:pk>/', UpdateProfile.as_view(), name='update-profile'),
     #Blog-------------------------------------------------------------------
     path('createBlog/', CreateListBlog.as_view(), name='create_blog'),
     path('ownBlog/', CreateListBlog.as_view(), name='list_own_blogs'),
