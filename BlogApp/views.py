@@ -35,11 +35,11 @@ class RegisterView(generics.CreateAPIView):
 #Login
 
 class CustomLoginView(generics.GenericAPIView):
-    serializer_class = LoginSerializer  # Use the LoginSerializer
+    serializer_class = LoginSerializer 
 
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)  # Validate the input
+        serializer.is_valid(raise_exception=True) 
 
         username = serializer.validated_data['username']  # This can be username or email
         password = serializer.validated_data['password']
@@ -54,9 +54,9 @@ class CustomLoginView(generics.GenericAPIView):
                 if user.check_password(password):
                     pass  # Authentication successful, do nothing
                 else:
-                    user = None  # Invalid password
+                    user = None  
             except User.DoesNotExist:
-                user = None  # User not found
+                user = None
 
         if user is not None:
             refresh = RefreshToken.for_user(user)
@@ -78,12 +78,12 @@ class CreateProfile(generics.CreateAPIView):
     permission_classes = [IsAuthenticated]
 
     def perform_create(self, serializer):
-        user = self.request.user  # Retrieve the authenticated user
+        user = self.request.user  
         if not user or not user.is_authenticated:
-            # If user is not authenticated, return a 401 Unauthorized response
+        
             return Response({"detail": "User not found", "code": "user_not_found"}, status=status.HTTP_401_UNAUTHORIZED)
         
-        # Save the profile and associate it with the authenticated user
+    
         serializer.save(user=user)
         super().perform_create(serializer)
 
@@ -108,12 +108,9 @@ class UpdateProfile(generics.RetrieveUpdateAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_object(self):
-        # Ensure we get the profile for the authenticated user
         user = self.request.user
         if not user or not user.is_authenticated:
             raise Response({"detail": "User not found", "code": "user_not_found"}, status=status.HTTP_401_UNAUTHORIZED)
-
-        # Retrieve the profile associated with the authenticated user
         try:
             profile = models.Profile.objects.get(user=user)
         except models.Profile.DoesNotExist:
