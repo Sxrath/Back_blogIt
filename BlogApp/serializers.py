@@ -3,6 +3,8 @@ from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 from  . import models
 from rest_framework.validators import UniqueValidator
+from rest_framework import serializers
+from .models import BlogPost, Tag
 
 #auth---------------------------------------------------------------------------
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -47,15 +49,12 @@ class CreateBlogSerializer(serializers.ModelSerializer):
         fields = ['title','image', 'content', 'tags']
 
     def create(self, validated_data):
-        # Extract tags from validated data
         tags_data = validated_data.pop('tags', None)  # Remove 'tags' from validated_data
         
         # Create the BlogPost instance
         blog_post = models.BlogPost.objects.create(**validated_data)
-        
-        # Add the tags to the blog_post using set()
         if tags_data:
-            blog_post.tags.set(tags_data)  # Use set() to assign the many-to-many field
+            blog_post.tags.set(tags_data)  
         
         return blog_post
 
@@ -68,8 +67,7 @@ class GetAllTagSerializer(serializers.ModelSerializer):
         model = models.Tag
         fields=["id","tag_name"]
 
-from rest_framework import serializers
-from .models import BlogPost, Tag
+
 
 class TagSerializer(serializers.ModelSerializer):
     class Meta:
